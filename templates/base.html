@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head> 
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bloomcha Bakes</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/Logo.PNG') }}" alt="Logo" class="logo">
+                </a>
+                <nav class="navigation">
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        {% if session.get('logged_in') %}
+                            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+                            {% if session.get('role') == 'Administrator' %}
+                                <li><a href="{{ url_for('admin_order_history') }}">Order History</a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('user_order_history') }}">My Orders</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><a href="{{ url_for('login') }}">Login</a></li>
+                        {% endif %}
+                        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                        <li><a href="{{ url_for('menu') }}">Menu</a></li>
+                        <li><a href="{{ url_for('cart_view') }}">Cart</a></li>
+                        {% if session.get('role') == 'Administrator' %}
+                            <li><a href="{{ url_for('admin_chat') }}">Admin Chat</a></li>
+                            <li><a href="{{ url_for('admin_orders') }}">Orders</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Bloomcha Bakes</p>
+        </footer>
+    </body>
+</html>

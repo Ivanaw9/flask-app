@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error{% endblock %}
+{% block content %}
+<div class="error-container">
+    <h2>Access Denied</h2>
+    <p>You must be logged in to complete the checkout process.</p>
+    <a href="{{ url_for('login') }}" class="button">Log In</a>
+</div>
+{% endblock %}

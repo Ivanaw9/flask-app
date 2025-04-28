@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %}Welcome to Bloomcha Bakes{% endblock %}
+    {% block content %}
+    <div class="welcome-section">
+        <h1>Welcome to Bloomcha Bakes!</h1>
+        <p>Your one-stop destination for delightful desserts and beverages.</p>
+        <a href="{{ url_for('menu') }}" class="explore-button">Explore Our Menu</a>
+    </div>
+
+    <div class="dessert-grid">
+        {% for dessert in desserts %}
+            <div class="dessert-card">
+                <img src="{{ url_for('static', filename=dessert.dessert_image) }}" alt="{{ dessert.Name }}" class="dessert-image">
+                <h3>{{ dessert.Name }}</h3>
+                <p>Price: ${{ dessert.Price }}</p>
+                <p>
+                    <span class="availability-button {% if dessert.availability == 'Available' %}success{% else %}fail{% endif %}">
+                        {{ dessert.availability }}
+                    </span>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="social-section">
+        <h2>Connect With Us</h2>
+        <p>Follow us on Instagram: <a href="https://instagram.com/yourpage" target="_blank">@bloomchabakes</a></p>
+        <p>Email us: <a href="mailto:info@bloombakes.com">info@bloombakes.com</a></p>
+    </div>
+    {% endblock %}
+</body>
+</html>

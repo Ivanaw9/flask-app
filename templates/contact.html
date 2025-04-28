@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<div class="chat-container">
+    <h2>Contact Support</h2>
+    <div class="chatbox">
+        <div class="chatbox-messages">
+            {% for message in messages %}
+                <div class="chatbox-message {% if message.sender_id == session.get('user_id') %}user-message{% else %}admin-message{% endif %}">
+                    <p>{{ message.content }}</p>
+                    <p class="chatbox-timestamp">{{ message.timestamp }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <form method="POST" action="{{ url_for('contact') }}" class="chatbox-form">
+            <textarea name="message" placeholder="Type your message here..." rows="5" required></textarea>
+            <button type="submit" style="position: absolute; bottom: 10px; right: 10px;">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

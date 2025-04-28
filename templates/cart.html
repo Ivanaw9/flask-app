@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+    <h2>Your Cart</h2>
+
+    <!-- Cart Items Section -->
+    <div class="dessert-grid">
+        {% for item in cart_items %}
+            <div class="dessert-card">
+                <img src="{{ url_for('static', filename=item.dessert.dessert_image) if item.dessert.dessert_image else url_for('static', filename='default-image.jpg') }}" alt="{{ item.dessert.Name }}" class="dessert-image standardized-image">
+                <h3>{{ item.dessert.Name }}</h3>
+                <p>Price: ${{ item.dessert.Price }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+                <form action="{{ url_for('update_cart', item_id=loop.index0) }}" method="POST">
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="quantity-input">
+                    <button type="submit">Update</button>
+                </form>
+                <form action="{{ url_for('remove_from_cart', item_id=loop.index0) }}" method="POST">
+                    <button type="submit" class="remove-button">Remove</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Total Price Section -->
+    <div class="cart-total">
+        <h3>Total: ${{ total_price }}</h3>
+        <form action="{{ url_for('checkout') }}" method="POST">
+            <button type="submit" class="checkout-button">Checkout</button>
+        </form>
+    </div>
+{% endblock %}

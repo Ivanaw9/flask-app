@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}My Order History{% endblock %}
+{% block content %}
+<h2>My Order History</h2>
+<div class="order-history">
+    {% for order in orders %}
+        <div class="order-card">
+            <div class="order-row">
+                <!-- First Column: Order Date -->
+                <div class="order-column">
+                    <h4>Order Date</h4>
+                    <p>{{ order.order_date }}</p>
+                </div>
+                <!-- Second Column: Dessert Orders -->
+                <div class="order-column">
+                    <h4>Desserts</h4>
+                    <ul>
+                        {% for detail in order_details %}
+                            {% if detail.order_id == order.order_id %}
+                                <li>
+                                    <img src="{{ url_for('static', filename=detail.dessert.dessert_image) }}" alt="{{ detail.dessert.Name }}" class="order-dessert-image">
+                                    <p>{{ detail.dessert.Name }}</p>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Third Column: Quantity -->
+                <div class="order-column">
+                    <h4>Quantity</h4>
+                    <ul>
+                        {% for detail in order_details %}
+                            {% if detail.order_id == order.order_id %}
+                                <li>{{ detail.quantity }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <!-- Order Status -->
+            <div class="order-status">
+                <p><strong>Status:</strong> {{ order.status }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

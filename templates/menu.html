@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Menu{% endblock %}
+{% block content %}
+    <h2>Menu</h2>
+
+    <!-- Search and Filter Section -->
+    <form method="GET" action="{{ url_for('menu') }}" class="search-bar">
+        <input type="text" name="search" placeholder="Search by name or type" value="{{ request.args.get('search', '') }}">
+        <select name="filter">
+            <option value="">Filter by availability</option>
+            <option value="Available" {% if request.args.get('filter') == 'Available' %}selected{% endif %}>Available</option>
+            <option value="Unavailable" {% if request.args.get('filter') == 'Unavailable' %}selected{% endif %}>Unavailable</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Dessert List -->
+    <div class="dessert-grid">
+        {% for dessert in desserts %}
+            <div class="dessert-card">
+                <img src="{{ url_for('static', filename=dessert.dessert_image) }}" alt="{{ dessert.Name }}" class="dessert-image">
+                <h3>{{ dessert.Name }}</h3>
+                <p>Price: ${{ dessert.Price | float }}</p>
+                <p>
+                    <span class="availability-button {% if dessert.availability == 'Available' %}success{% else %}fail{% endif %}">
+                        {{ dessert.availability }}
+                    </span>
+                </p>
+                {% if session.get('role') == 'Administrator' %}
+                    <form method="POST" action="{{ url_for('update_availability', dessert_id=dessert.dessert_id) }}">
+                        <select name="availability" required>
+                            <option value="Available" {% if dessert.availability == 'Available' %}selected{% endif %}>Available</option>
+                            <option value="Unavailable" {% if dessert.availability == 'Unavailable' %}selected{% endif %}>Unavailable</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                {% else %}
+                    {% if dessert.availability == 'Available' %}
+                        <form action="{{ url_for('add_to_cart', dessert_id=dessert.dessert_id) }}" method="POST">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add Dessert Section (Visible to Administrators Only) -->
+    {% if session.get('role') == 'Administrator' %}
+    <h3>Add a New Dessert</h3>
+    <form method="POST" action="{{ url_for('menu') }}" enctype="multipart/form-data" class="bubbly-form">
+        <input type="text" name="name" placeholder="Dessert Name" required>
+        <select name="type" required>
+            <option value="" disabled selected>Select Dessert Type</option>
+            <option value="WHOLE_CAKES">Whole Cakes</option>
+            <option value="CAKE_SLICES">Cake Slices</option>
+            <option value="MATCHA">Matcha</option>
+            <option value="DESSERT_BOX">Dessert Box</option>
+            <option value="BEVERAGE">Beverage</option>
+        </select>
+        <input type="text" name="price" placeholder="Price" required>
+        <select name="availability" required>
+            <option value="Available">Available</option>
+            <option value="Unavailable">Unavailable</option>
+        </select>
+        <label for="dessert_image">Upload Dessert Image:</label>
+        <input type="file" id="dessert_image" name="dessert_image" accept="image/*" required>
+        <button type="submit">Add Dessert</button>
+    </form>
+    {% endif %}
+{% endblock %}

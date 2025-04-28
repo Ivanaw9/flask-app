@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<div class="order-container">
+    <h2>User Orders</h2>
+    <div class="order-list">
+        {% for order in orders %}
+            <div class="order-card">
+                <h3>Order ID: {{ order.order_id }}</h3>
+                <p><strong>User:</strong> {{ order.user.name }} ({{ order.user.email }})</p>
+                <p><strong>Dessert:</strong> {{ order.dessert.Name }}</p>
+                <p><strong>Price:</strong> ${{ order.dessert.Price }}</p>
+                <p><strong>Status:</strong> {{ order.status }}</p>
+                <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
